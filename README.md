@@ -31,7 +31,8 @@ This is a full-stack **Chess Game** built with **Node.js**, **Express**, **Socke
 ## 📸 Screenshots
 ![Screenshot 2025-06-29 204020](https://github.com/user-attachments/assets/69085f88-d6c5-40f2-8983-114eb0c54346)
 ![Screenshot 2025-06-29 204034](https://github.com/user-attachments/assets/e7a986da-73e9-4f36-a172-3b142d0892b2)
-![Screenshot 2025-06-29 204252](https://github.com/user-attachments/assets/588c702c-8e8a-48cc-864d-53806d4643b0)
+![Screenshot 2025-06-29 204252](https://github.com/user-attachments/assets/fab4f0c0-3a85-4da5-98f5-19b2c7f70b63)
+
 
 ## 🚀 Getting Started
 
