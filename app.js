@@ -13,6 +13,8 @@ const chess = new Chess();
 let players = {};
 let currentPlayer = "w";
 
+const PORT = process.env.PORT || 5000; 
+
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -94,6 +96,6 @@ io.on("connection", (uniqueSocket) => {
   });
 });
 
-server.listen(3333, () => {
-  console.log("Server is running on http://localhost:3333");
+server.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
