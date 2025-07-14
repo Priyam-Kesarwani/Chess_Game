@@ -2,6 +2,11 @@
 
 This is a full-stack **Chess Game** built with **Node.js**, **Express**, **Socket.io**, and styled using **Tailwind CSS**. It allows two players to play chess in real time via web sockets. The game includes essential features like **Undo**, **Reset**, and full chess logic validation using `chess.js`.
 
+## 🔗 Live Demo
+
+Check out the live site here:  
+👉 https://chess-game-41r5.onrender.com
+
 ## 🧩 Features
 
 - ✅ Real-time two-player Chess Game
