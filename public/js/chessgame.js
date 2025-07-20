@@ -74,6 +74,8 @@ const renderBoard = () => {
         );
         pieceElement.innerText = getPieceUnicode(square);
         pieceElement.draggable = playerRole === square.color;
+
+        // 🖱️ Mouse Events
         pieceElement.addEventListener("dragstart", (e) => {
           if (pieceElement.draggable) {
             draggedPiece = pieceElement;
@@ -81,22 +83,36 @@ const renderBoard = () => {
             e.dataTransfer.setData("text/plain", "");
           }
         });
+
         pieceElement.addEventListener("dragend", () => {
           draggedPiece = null;
           sourceSquare = null;
         });
 
-        pieceElement.addEventListener("dragover", (e) => {
-          e.preventDefault();
+        // 📱 Touch Events
+        pieceElement.addEventListener("touchstart", (e) => {
+          if (playerRole === square.color) {
+            draggedPiece = pieceElement;
+            sourceSquare = { row: rowindex, col: squareindex };
+          }
         });
-        pieceElement.addEventListener("drop", (e) => {
-          e.preventDefault();
+
+        pieceElement.addEventListener("touchend", (e) => {
           if (draggedPiece) {
-            const targetSquare = {
-              row: parseInt(pieceElement.parentElement.dataset.row),
-              col: parseInt(pieceElement.parentElement.dataset.col),
-            };
-            handleMove(sourceSquare, targetSquare);
+            const touch = e.changedTouches[0];
+            const targetElem = document.elementFromPoint(
+              touch.clientX,
+              touch.clientY
+            );
+            if (targetElem && targetElem.classList.contains("square")) {
+              const targetSquare = {
+                row: parseInt(targetElem.dataset.row),
+                col: parseInt(targetElem.dataset.col),
+              };
+              handleMove(sourceSquare, targetSquare);
+            }
+            draggedPiece = null;
+            sourceSquare = null;
           }
         });
 
@@ -127,7 +143,6 @@ const renderBoard = () => {
   } else {
     boardElement.classList.remove("flipped");
   }
-
 };
 
 const handleMove = (source, target) => {
@@ -210,4 +225,3 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 document.getElementById("undoBtn").addEventListener("click", () => {
   socket.emit("undoMove");
 });
-
