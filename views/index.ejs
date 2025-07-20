@@ -1,123 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chess Game</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      body {
-        background-image: url("/ABSTRACT_WALLPAPER_Mesa_de_trabajo_1.jpg");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-      }
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chess Game</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url("/ABSTRACT_WALLPAPER_Mesa_de_trabajo_1.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .chessboard {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      width: 400px;
+      height: 400px;
+      transform: rotate(0deg);
+    }
+
+    .piece.white {
+      color: white;
+      filter: drop-shadow(0 0 2px rgba(0, 0, 0, 1));
+    }
+
+    .piece.black {
+      color: black;
+    }
+
+    .flipped {
+      transform: rotate(180deg);
+    }
+
+    .square {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .square.light {
+      background-color: #f0d9b5;
+    }
+
+    .square.dark {
+      background-color: #b58863;
+    }
+
+    .piece {
+      font-size: 36px;
+      cursor: pointer;
+      font-family: "Segoe UI Symbol", "Arial Unicode MS", "Noto Sans Symbols",
+        sans-serif;
+    }
+
+    .piece.draggable {
+      cursor: grab;
+    }
+
+    .dragging {
+      opacity: 0.5;
+    }
+
+    .chessboard.flipped .piece {
+      transform: rotate(180deg);
+    }
+
+    .last-move {
+      background-color: #ffe066 !important;
+      transition: background 0.3s;
+    }
+
+    @media (max-width: 500px) {
       .chessboard {
-        display: grid;
-        grid-template-columns: repeat(8, 1fr);
-        grid-template-rows: repeat(8, 1fr);
-        width: 400px;
-        height: 400px;
-        transform: rotate(0deg);
+        width: 300px;
+        height: 300px;
       }
-      .piece.white {
-        color: white;
-        filter: drop-shadow(0 0 2px rgba(0, 0, 0, 1));
-      }
-      .piece.black {
-        color: black;
-      }
-      .flipped {
-        transform: rotate(180deg);
-      }
+
       .square {
-        width: 50px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: 37.5px;
+        height: 37.5px;
       }
-      .square.light {
-        background-color: #f0d9b5;
-      }
-      .square.dark {
-        background-color: #b58863;
-      }
+
       .piece {
-        font-size: 36px;
-        cursor: pointer;
-        font-family: "Segoe UI Symbol", "Arial Unicode MS", "Noto Sans Symbols",
-          sans-serif;
+        font-size: 28px;
       }
-      .piece.draggable {
-        cursor: grab;
-      }
-      .dragging {
-        opacity: 0.5;
-      }
-      .chessboard.flipped .piece {
-        transform: rotate(180deg);
-      }
-      .last-move {
-        background-color: #ffe066 !important;
-        transition: background 0.3s;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="w-full h-screen flex items-center justify-center">
-      <div class="flex flex-col items-center">
-        <h1
-          class="text-6xl font-extrabold text-white drop-shadow-lg tracking-widest mb-6"
-          style="
+    }
+  </style>
+</head>
+
+<body>
+  <div class="w-full h-screen flex items-center justify-center">
+    <div class="flex flex-col items-center">
+      <h1 class="text-6xl font-extrabold text-white drop-shadow-lg tracking-widest mb-6" style="
             letter-spacing: 0.3em;
             text-shadow: 0 4px 16px #000, 0 1px 0 #fff;
             font-family: 'Times New Roman', Times, serif;
-          "
-        >
-          CHESS
-        </h1>
-        <div class="chessboard bg-red-800"></div>
-      </div>
+          ">
+        CHESS
+      </h1>
+      <div class="chessboard bg-red-800"></div>
     </div>
+  </div>
 
-    <div class="flex items-center justify-center gap-10 py-2">
-      <button
-        id="undoBtn"
-        class="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-400 transition duration-200 font-bold"
-      >
-        Undo Move
-      </button>
-      <button
-        id="resetBtn"
-        class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition duration-200 font-bold"
-      >
-        Reset Game
-      </button>
-      <button
-        id="joinSecondPlayerBtn"
-        class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition duration-200 font-bold"
-      >
-        Second Player / Spectator
-      </button>
-    </div>
+  <div class="flex items-center justify-center gap-10 py-2">
+    <button id="undoBtn"
+      class="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-400 transition duration-200 font-bold">
+      Undo Move
+    </button>
+    <button id="resetBtn"
+      class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition duration-200 font-bold">
+      Reset Game
+    </button>
+    <button id="joinSecondPlayerBtn"
+      class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition duration-200 font-bold">
+      Second Player / Spectator
+    </button>
+  </div>
 
-    <script
-      src="https://cdn.socket.io/4.8.1/socket.io.min.js"
-      integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"
-      integrity="sha512-xRllwz2gdZciIB+AkEbeq+gVhX8VB8XsfqeFbUh+SzHlN96dEduwtTuVuc2u9EROlmW9+yhRlxjif66ORpsgVA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script src="/js/chessgame.js"></script>
-    <script>
-      document.getElementById("joinSecondPlayerBtn").addEventListener("click", () => {
-          window.open("/", "_blank");
-        });
-    </script>
-  </body>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+    integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"
+    integrity="sha512-xRllwz2gdZciIB+AkEbeq+gVhX8VB8XsfqeFbUh+SzHlN96dEduwtTuVuc2u9EROlmW9+yhRlxjif66ORpsgVA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="/js/chessgame.js"></script>
+  <script>
+    document.getElementById("joinSecondPlayerBtn").addEventListener("click", () => {
+      window.open("/", "_blank");
+    });
+  </script>
+</body>
+
 </html>
